@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+const int N=100;
+int a[N][N];
+int vis[N][80];
+int ans[N][80];
+signed main() {
+	//20行 每行5列；
+	int n;
+	int i,j,t,k;
+	int num=0;
+	for(i=1; i<=20; i++) {
+		for(j=1; j<=5; j++) {
+			num++;
+			a[i][j]=num;
+		}
+	}//数组初始化
+	cin>>n;
+	int q;
+	for(t=1; t<=n; t++) {
+		cin>>q;
+		int s=0;
+		int flag=0;
+		for(i=1; i<=20; i++) { //行
+			for(j=1; j<=5; j++) { //先找连续的位置
+				if(vis[i][j]==0) {
+					s++;
+					ans[t][s]=a[i][j];//记录位置；
+				}
+				if(vis[i][j]==1) {
+					s=0;//再次寻找；
+				}
+				if(s==q) {
+					flag=1;//说明第一次找到了；
+					break;
+				}
+			}//内循环结束 说明没有找到相邻的
+			if(flag==1) { //找到了相邻的位置；
+				for(int x=1; x<=q; x++) { //将找到的位置标记为1；             //确定下标非常的重要； 
+					if(ans[t][x]%5==0) {//5  10
+					vis[(ans[t][x])/5][5]=1;
+					} else {
+						vis[(ans[t][x])/5+1][(ans[t][x])%5]=1;//标记为1;
+					}
+				}
+				s=0;
+				break;      //就可以退出外层循环  开始下一次票
+			}
+			if(flag==0) { //如果在这一行没有找到的话，那么就继续找下一行；
+				s=0;
+			}
+		}
+
+		if(flag==0) { //
+			s=0;//没有找到相邻的位置；
+			int mark=0;
+			for(i=1; i<=20; i++) {
+				for(j=1; j<=5; j++) {
+					if(vis[i][j]==0) {
+						s++;
+						ans[t][s]=a[i][j];
+						vis[i][j]=1;
+						if(s==q) {
+							mark=1;
+							break;
+						}
+					}
+				}
+				if(mark==1) {
+					break;
+				}
+			}
+		}
+	}
+	for(i=1; i<=n; i++) {
+		for(j=1; j<=5; j++) {
+			if(ans[i][j]!=0) {
+				cout<<ans[i][j]<<" ";
+			}
+		}
+		cout<<endl;
+	}
+	return 0;
+}

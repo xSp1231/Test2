@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+const int N=1e3+9;
+map<int,map<int,int>>mp;//map二维数组 
+struct node{
+	int x,y;
+};
+node a[N];
+node pos[N];
+int ans[5];
+signed main(){
+	int n;
+	cin>>n;
+	int i,j;
+	for(i=1;i<=n;i++){//输入坐标 
+		cin>>a[i].x>>a[i].y;
+		mp[a[i].x][a[i].y]=1;//标记； 
+	}
+	int k=0;
+	for(i=1;i<=n;i++){ 
+		if(mp[a[i].x-1][a[i].y]&&mp[a[i].x+1][a[i].y]&&mp[a[i].x][a[i].y-1]&&mp[a[i].x][a[i].y+1]){
+			pos[++k]={a[i].x,a[i].y};//找到符合条件的垃圾回收点		
+		}	
+    }
+    for(i=1;i<=k;i++){//找到k个符合条件的垃圾回收点
+    	int score=0;
+    	if(mp[pos[i].x-1][pos[i].y-1]){
+    		score++;
+		}
+    	if(mp[pos[i].x-1][pos[i].y+1]){
+    		score++;
+		}if(mp[pos[i].x+1][pos[i].y+1]){
+    		score++;
+		}if(mp[pos[i].x+1][pos[i].y-1]){
+    		score++;
+		}
+		ans[score]++;
+	} 
+	for(i=0;i<=4;i++){
+		cout<<ans[i]<<endl;
+	}
+	return 0;
+}

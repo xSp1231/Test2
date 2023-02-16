@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>//---------------------和大于等于s的最小连续区间长度
+const int N=1e3;
+#define int long long
+#define inf 0x3f3f3f
+using namespace std;
+int a[N];
+signed main() {
+	int n,s;
+	cin>>n>>s;
+	int i;
+	for(i=1; i<=n; i++) {
+		cin>>a[i];
+	}
+	int l=1,r=1;//有重要意义
+	int sum=0;
+	int len=inf;
+	int posx=0,posy=0;
+	while(1) { //1 2 3 3 2 4 5 1 2       5
+		while(r<=n&&sum<s) {
+			sum+=a[r];
+			r++;
+		}//想一想退出循环的条件
+		if(sum<s) { //if l>n了 那么一定有sum<s  所以sum<s 等价于 l>n;
+			break;//break 为循环退出的条件；
+		} else if(sum>=s) {
+			len=min(len,r-l);
+		}
+		sum-=a[l];
+		l++;
+	}
+	if(len>n) {
+		len=0;
+	}
+	cout<<len<<endl;
+	return 0;
+}

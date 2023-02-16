@@ -1,0 +1,51 @@
+蓝桥杯 推导部分和
+https://www.acwing.com/problem/content/description/4654/
+csdn博客：
+
+#include<bits/stdc++.h>
+#define int long long
+const int N=1e6+9;
+using namespace std;
+int pre[N],val[N];
+int n,m,q;
+int find(int x){
+	if(pre[x]==x){
+		return x;
+	}
+	else{
+	int t=pre[x];
+	pre[x]=find(pre[x]);
+	val[x]+=val[t];
+	return pre[x];
+	}
+}
+signed main() {
+	cin>>n>>m>>q;
+	int i;
+	for(i=1; i<=n; i++) {
+		pre[i]=i;
+	}
+	int l,r,s;
+	for(i=1;i<=m;i++){
+		cin>>l>>r>>s;//[l,r]的和为s   
+	    l--;//前缀和思想   想要求出[l,r]的和，那么就需要[x,l-1]和[x,r]的和 
+		int pl=find(l);
+		int pr=find(r);
+		if(pl!=pr){
+			pre[pl]=pr;
+			val[pl]=s+val[r]-val[l]; 
+		}//合并操作 
+	}
+	int a,b;
+	while(q--){
+		cin>>a>>b;//小到大的和 
+		a--;
+		if(find(a)!=find(b)){
+			cout<<"UNKNOWN"<<endl; 
+		}
+		else{
+			cout<<val[a]-val[b]<<endl;
+		}
+	} 
+	return 0;
+}

@@ -1,0 +1,78 @@
+https://www.acwing.com/problem/content/description/4408/
+双指针法1：
+#include<bits/stdc++.h>
+#define int long long
+const int N=1e3+9;
+using namespace std;
+int a[N][N],sum[N][N];
+int n,m,k;
+signed main() {
+	int n,m,k;
+	cin>>n>>m>>k;
+	int i,j;
+	for(i=1; i<=n; i++) {
+		for(j=1; j<=m; j++) {
+			cin>>a[i][j];
+			sum[i][j]=sum[i][j-1]+sum[i-1][j]-sum[i-1][j-1]+a[i][j];
+		}
+	}
+	int ans=0;
+	int x1,x2,l,r;
+	for(x1=1; x1<=n; x1++) {//x1 x2为上下边界
+		for(x2=x1; x2<=n; x2++) {
+			for(l=1,r=1; l<=r&&r<=m; r++) { //r为右边界 为快指针 l随着r的变化而变化
+				while(l<=r&&sum[x2][r]-sum[x2][l-1]-sum[x1-1][r]+sum[x1-1][l-1]>k) { //矩阵面积大于k退出循环
+					l++;//r指针一直右移动  那么l指针应该什么时候移动呢？当面积大于k时 l指针移动 
+				}
+				//什么时候结束循环呢 当面积<=k 或者 l>r时（此时 就不记录答案） 
+				if(l<=r) {//面积<=k时 就可以记录答案了         //记录答案的前提条件 
+					ans+=r-l+1;//画图理解 
+				}
+			}
+		}
+	}
+	cout<<ans<<endl;
+	return 0;
+}
+
+双指针法二:
+#include<bits/stdc++.h>
+#define int long long
+const int N=1e3+9;
+using namespace std;
+int a[N][N],sum[N][N];
+int n,m,k;
+signed main() {
+	int n,m,k;
+	cin>>n>>m>>k;
+	int i,j;
+	for(i=1; i<=n; i++) {
+		for(j=1; j<=m; j++) {
+			cin>>a[i][j];
+			sum[i][j]=sum[i][j-1]+sum[i-1][j]-sum[i-1][j-1]+a[i][j];
+		}
+	}
+	int ans=0;
+	int s=0;
+	int x1,x2,l,r;
+	for(x1=1; x1<=n; x1++) {
+		for(x2=x1; x2<=n; x2++) {
+			int l=1,r=1;//左右扩展
+			while(1) {
+				while(l<=r&&sum[x2][r]-sum[x2][l-1]-sum[x1-1][r]+sum[x1-1][l-1]>k) { //求矩形面积小于等于k
+					l++;//向右扩展
+				} //如果超出范围  那么l向右扩展
+				if(l<=r) {
+					ans+=r-l+1;
+				}
+				r++;//必须放在这个位置  因为r要先加，才能判断是否越界那些 
+				if(r>m||l>r) {
+					break;
+				}
+
+			}
+		}
+	}
+	cout<<ans<<endl;
+	return 0;
+}

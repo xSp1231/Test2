@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e6+9;
+#define int long long
+struct node{
+	int sx,sy,ex,ey;
+	double r;
+	double cx,cy;
+};
+node a[N];
+int ans=0;
+map<pair<pair<double,double>,double>,int>mp;
+signed main(){
+	int q;
+	cin>>q;
+	int i,j;
+	double k;
+	for(i=1;i<=q;i++){
+		cin>>a[i].sx>>a[i].sy>>a[i].ex>>a[i].ey;
+		a[i].r=(a[i].sx-a[i].ex)*(a[i].sx-a[i].ex)+(a[i].sy-a[i].ey)*(a[i].sy-a[i].ey);
+		a[i].cx=0.5*(a[i].sx+a[i].ex);
+		a[i].cy=0.5*(a[i].sy+a[i].ey);
+		mp[{{a[i].cx,a[i].cy},a[i].r}]++;
+	}
+	cout<<mp.size()<<endl;
+	return 0;
+}
+

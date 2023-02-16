@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define inf 0x3f3f3f3f
+const int N=1e6+9;
+int head[N],ne[N],w[N],e[N],idx;//w[N]权重数组 
+int dis[N];//源点到其余点的距离
+int vis[N];//标记数组 
+int n,m;
+void add(int a,int b,int c){
+	e[idx]=b,ne[idx]=head[a],w[idx]=c,head[a]=idx,idx++;
+}
+typedef pair<int ,int >PII;//first存放节点 second存放源点到该节点的距离 
+struct cmp{//定义pair的排序方式 
+	bool operator()(PII a,PII b){
+		return a.second>b.second;//小根堆 
+	} 
+};
+int dijistra(){
+	int i,j;
+	memset(dis,inf,sizeof(dis));
+	dis[1]=0;
+	priority_queue<PII,vector<PII>,cmp>q;
+	q.push({1,0});
+	while(!q.empty()){
+		PII t=q.top();
+		int dot=t.first;//dot为节点
+		int distance=t.second;//distance 为源点到该节点（dot）的距离
+		q.pop();
+		if(vis[dot]==1) continue;
+		vis[dot]=1;//将这个点加入到集合里面 
+		for(i=head[dot];i!=-1;i=ne[i]){//遍历和这个节点相邻的点 
+			j=e[i];//j为dot可以到达的下一个点 
+			if(dis[j]>dis[dot]+w[i]){
+				dis[j]=dis[dot]+w[i];
+				q.push({j,dis[j]});
+			}
+		} 
+	}
+	if(dis[n]==inf){
+		return -1;
+	}
+	return dis[n];	
+}
+int main(){
+	memset(head,-1,sizeof(head));
+	cin>>n>>m;
+	int i,j;
+	while(m--){
+		int a,b,c;
+		cin>>a>>b>>c;
+		add(a,b,c);
+	}
+	cout<<dijistra()<<endl;
+	return 0;
+} 

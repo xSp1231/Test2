@@ -1,0 +1,103 @@
+链接：   https://blog.csdn.net/TheWayForDream/article/details/118436732?ops_request_misc
+
+区间修改 区间查询
+https://blog.csdn.net/Wu_while/article/details/119491559?ops_request_misc
+
+
+单点修改 区间查询
+#include<bits/stdc++.h>
+#define int long long
+const int N=1e6+9;
+using namespace std;
+int t[N];
+int n,m;
+int lowbit(int x) {
+	return x&(-x);
+}
+void add_dandian(int x,int num) { //单点修改 在x位置处加入num;
+	int i;
+	for(i=x; i<=n; i+=lowbit(i)) { //i的父节点为i+lowbit(i);
+		t[i]+=num;//更新自己和其所有的父亲节点 
+	}
+}
+int sum(int l,int r) { //求[l,r]的和 先求[1,r]，再求[1,l-1]
+	int ans=0;
+	for(int i=r; i>=1; i-=lowbit(i)) {//[1,r]
+		ans+=t[i];
+	}
+	for(int i=l-1; i>=1; i-=lowbit(i)) { //[1,l-1]
+		ans-=t[i];
+	}
+	return ans;
+}
+signed main() {
+	cin>>n>>m;
+	int i;
+	int num;
+	for(i=1; i<=n; i++) {
+		cin>>num;
+		add_dandian(i,num);//建立树状数组；
+	}
+	int op,x,k;
+	while(m--) {
+		cin>>op>>x>>k;
+		if(op==1) {
+			add_dandian(x,k);//单点修改 
+		} else {
+			cout<<sum(x,k)<<endl;//区间查询 
+		}
+	}
+	return 0;
+}
+
+区间修改 单点查询
+#include<bits/stdc++.h>
+#define int long long
+const int N=1e6+9;
+using namespace std;
+int a[N],b[N];
+int t[N];
+int n,m;
+int lowbit(int x) {
+	return x&(-x);
+}
+void add_dandian(int x,int num) { //单点修改 在x位置处加入num;
+	int i;
+	for(i=x; i<=n; i+=lowbit(i)) { //i的父节点为i+lowbit(i);
+		t[i]+=num;//更新自己和其所有的父亲节点
+	}
+}
+int sum(int l,int r) { //求[l,r]的和 先求[1,r]，再求[1,l-1]
+	int ans=0;
+	for(int i=r; i>=1; i-=lowbit(i)) {//[1,r]
+		ans+=t[i];
+	}
+	for(int i=l-1; i>=1; i-=lowbit(i)) { //[1,l-1]
+		ans-=t[i];
+	}
+	return ans;
+}
+signed main() {
+	cin>>n>>m;
+	int i;
+	int num;
+	for(i=1; i<=n; i++) {
+		cin>>a[i];
+		b[i]=a[i]-a[i-1];//建立差分数组
+		add_dandian(i,b[i]);//建立树状数组 用树状数组维护差分数组 树状数组里面的每一段和 即为数组a里面的元素 ；
+	}
+	int op,l,r,c,x;
+	while(m--) {
+		cin>>op;
+		if(op==1) {
+		     cin>>l>>r>>c;
+			 add_dandian(l,c);//原数组a[]的区间修改[l,r]，即为差分数组的单点修改 
+			 add_dandian(r+1,-c); 
+		} else {
+			cin>>x;
+			cout<<sum(1,x)<<endl;//差分数组的和为a[]数组的一个元素 
+		}
+	}
+	return 0;
+}
+

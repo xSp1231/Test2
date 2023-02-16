@@ -1,0 +1,45 @@
+acwing  154
+题解：https://www.acwing.com/solution/content/97229/
+
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+const int N=1e6+9;
+int a[N];
+deque<int > q;
+signed main() {
+	int n,k;
+	cin>>n>>k;
+	int i;
+	for(i=1; i<=n; i++) {
+		cin>>a[i];
+	}
+	for(i=1; i<=n; i++) {
+		//寻找窗口最小值
+		while(!q.empty()&&q.back()>a[i]) { //当遇到比队尾小的元素，那么就去除队尾。// 只要有元素比队尾元素小，那么队尾元素就不可能是最小值，所以无用，直接去除
+			q.pop_back();//为什么遇到比队尾元素大的要加入呢。比如 -2 3 4 5 如果不加 我们可以保证在区间[1,3]可以求解，但是在区间[2，4] 就不可求解，因为队列为空
+		}
+		q.push_back(a[i]);//队尾添加元素
+		if(i-k>=1&&q.front()==a[i-k]) { //如果队尾滑出窗口，那么队头元素就应该去除
+			q.pop_front(); //维持窗口长度
+		}
+		if(i>=k) { //窗口形成
+			cout<<q.front()<<" ";
+		}
+	}
+	cout<<endl;
+	q.clear();
+	for(i=1; i<=n; i++) { //寻找窗口最大值
+		while(!q.empty()&&q.back()<a[i]) { //只要有元素比队尾元素大，那么队尾元素就不可能是最大值
+			q.pop_back();//去除队尾元素
+		}
+		q.push_back(a[i]);
+		if(i-k>=1&&q.front()==a[i-k]) {
+			q.pop_front();
+		}
+		if(i>=k) { //形成窗口
+			cout<<q.front()<<" ";
+		}
+	}
+	return 0;
+}

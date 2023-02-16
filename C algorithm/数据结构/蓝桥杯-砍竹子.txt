@@ -1,0 +1,44 @@
+砍竹子：
+优先队列+模拟
+
+#include<bits/stdc++.h>
+#define inf 0x3f3f3f3f
+using namespace std;
+const int N=1e6+9;
+typedef pair<long,long >PII;
+priority_queue<PII>q;
+int n;
+long long ans=0;
+signed main() {// 总体思路 先砍高的竹子，还要判断是否相邻  如果竹子高度为一 那么久踢出队列
+	cin>>n;
+	int i;
+long long t;
+	for(i=1; i<=n; i++) {
+	scanf("%lld",&t);
+		if(t!=1) { //如果竹子长度不为1的话 入队列   如果为1那么就可以不入队列
+			q.push({t,i});//高度 以及编号
+		}
+	}
+
+	while(!q.empty()) { //取出队头
+		long long h=q.top().first;//高度
+		long long  num=q.top().second;//编号
+		q.pop();
+		long long nowh=sqrt((h/2)+1);//砍去后的高度
+		if(nowh!=1) {//高度不为1 再入队列  继续操作   为1就不用管
+			q.push({nowh,num});
+		}
+
+		//之后判断是否含有连续区域
+		while(!q.empty()&&q.top().first==h&&q.top().second==num-1) { //高度一致前一样 并且编号相邻  判断是否为连续区间
+			num--;
+			q.pop();
+			if(nowh!=1) {
+				q.push({nowh,num});
+			}
+		}
+		ans++;
+	}
+	cout<<ans<<endl;
+	return 0;
+}

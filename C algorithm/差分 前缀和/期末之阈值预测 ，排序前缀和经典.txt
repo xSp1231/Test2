@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 100010;
+int n;
+struct node {
+	int y;
+	int res;
+};
+int cmp(node a,node b) {
+	return a.y<b.y;
+}
+node g[N];
+int s[2][N];
+int pre[N],hou[N];
+int main() {
+	cin>>n;
+	int i;
+	for( i=1;i<=n;i++) cin>>g[i].y>>g[i].res;
+	sort(g+1,g+n+1,cmp);
+	//前缀和
+	for(i=1; i<=n; i++) {
+		if(g[i].res==0) {
+			pre[i]=pre[i-1]+1;
+		} else {
+			pre[i]=pre[i-1];
+		}
+	}
+	for(i=n; i>=1; i--) {
+		if(g[i].res==1) {
+			hou[i]=hou[i+1]+1;
+		} else {
+			hou[i]=hou[i+1];
+		}
+	}
+	int res = 0, ans;// 对于每个阈值
+	for(int i = 1; i <= n; i ++) {
+		int t=pre[i-1]+hou[i];
+		if(t >= res) {
+			res = t, ans = g[i].y;
+		}
+		// 相同的阈值跳过 超级重要
+		while( i<=n-1&&g[i].y == g[i + 1].y) {
+			i ++;
+		}
+	}
+	cout <<ans << endl;
+}

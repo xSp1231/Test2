@@ -1,0 +1,30 @@
+acwing 799
+数据量大的时候使用map 
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+const int N=1e6+9;
+int a[N];
+int num[N];
+signed main() {
+	int n;
+	cin>>n;
+	int i;
+	for(i=1; i<=n; i++) {
+		cin>>a[i];
+	}
+	int j=1;
+	int ans=-999;
+	for(i=1; i<=n;) { // 1 2 2 3 5
+		num[a[i]]++;
+		while(num[a[i]]>1) { //遇到了重复数字 指针j向右移动  知道num[a[i]]==1 说明此时不含重复数字
+		//在while()里面可以不计算长度了 
+			num[a[j]]--;
+			j++;//j移动 
+		}
+		ans=max(ans,i-j+1);
+		i++;
+	}
+	cout<<ans<<endl;
+	return 0;
+}

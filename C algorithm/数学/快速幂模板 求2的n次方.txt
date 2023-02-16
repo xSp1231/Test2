@@ -1,0 +1,19 @@
+#include<stdio.h>
+int main() {
+	int n;
+	scanf("%d",&n);
+	long long base=2;
+	long long result=1;
+	while(n>0){
+		if(n%2==0){
+			n=n/2;
+			base=base*base;
+		}
+		else{
+			n=n-1;
+			result=result*base;
+		}
+	}
+	printf("%lld\n",2*(result-1));
+	return 0;
+}

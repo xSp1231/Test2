@@ -1,0 +1,30 @@
+删除序列
+
+#include<bits/stdc++.h>
+#define int long long
+#define inf 0x3f3f3f3f
+using namespace std;
+const int N=1e6+9;
+int dp[N];
+int s[N];
+int ans=0;
+signed main() {
+	int n;
+	cin>>n;
+	int i;
+	int t;
+	int maxx=-999999;
+	for(i=1; i<=n; i++) {
+		cin>>t;
+		s[t]+=t;//求出相同数的和
+		maxx=max(maxx,t);
+	}
+	//将数按自然数顺序排列 如果 x选了，那么x-1和x+1就不能选择了，所以相邻的数就不能选择了。同时将所有的相邻的数删除
+	//那么我们事先就可以弄一个集合 来维护 每一个数的总的和；
+	//所以数x具有选和不选两种情况
+	for(i=1; i<=maxx; i++) { //从自然数1开始依次遍历到最大的数maxx
+		dp[i]=max(dp[i-1],dp[i-2]+s[i]);//自然数i可以选（选了的话 那么其相邻数就不能选） 也可以不选
+	}
+	cout<<dp[maxx]<<endl;
+	return 0;
+}

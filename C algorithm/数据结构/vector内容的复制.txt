@@ -1,0 +1,14 @@
+1、vector是一个构造对象，不能直接使用=符号进行复制，必须迭代每个元素来复制。或者重载=操作符。
+2、大致有一下几种方法实现用于把一个vector复制给另一个vector：
+方法1：
+vector<int > v1(v2);//声明
+
+方法2：使用函数assign进行赋值：
+vector<int > v1;//声明v1
+v1.assign(v2.begin(), v2.end());//将v2赋值给v1 这里的v2可以为其他容器 比如 set,queue...
+ 
+方法3：使用循环语句赋值，效率较差
+vector<int >::iterator it;//声明迭代器
+for(it = v2.begin();it!=v2.end();++it){//遍历v2,赋值给v1
+     v1.push_back(it);
+}

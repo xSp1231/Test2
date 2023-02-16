@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+const int N=30;
+int row[N],col[N];
+int sum=0,flag;
+int n;
+int k=0;
+void dfs(int pos) { //pos 为其当前所在的行；
+	int i,j;
+	if(pos==n+1) {
+		sum++;
+			for(i=1; i<=n; i++) {
+				cout<<row[i]<<" ";
+			}
+			cout<<endl;
+		return ;
+	} else {
+		for(i=1; i<=n; i++) { //遍历列
+			if(col[i]==0) {//如果这一列没有被占用的话 那么就检查（pos,i）是否与之前已经摆放过的点重合；
+				flag=1;//if花括号的范围相当关键 
+				for(j=1; j<pos; j++) { //(pos,j)//
+					if(abs(pos-j)==abs(i-row[j])) {
+						flag=0;//表示当前点不行  break 重新看其他列行不行；
+						break;
+					}
+				}
+				if(flag==1) { //flag==1;表示当前坐标点可以摆放；
+					row[pos]=i;//表示pos行i列//存储坐标；
+					col[i]=1;
+					dfs(pos+1);
+					col[i]=0;
+				}
+			}
+		}
+		return;
+	}
+}
+signed main() {
+	cin>>n;
+	dfs(1);
+	cout<<sum<<endl;
+	return 0;
+}

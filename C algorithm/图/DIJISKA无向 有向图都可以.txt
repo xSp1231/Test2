@@ -1,0 +1,63 @@
+#include<iostream>
+using namespace std;
+const int N=1e2;
+#define inf 999999999
+int e[N][N],visit[N],dis[N];
+int n,m;
+int main() {
+	cin>>n>>m;
+	int i,j;
+	for(i=1; i<=n; i++) {
+		for(j=1; j<=n; j++) {
+			if(i==j) {
+				e[i][j]=0;
+			} else {
+				e[i][j]=inf;
+			}
+		}
+	}
+	int a,b,c;
+	for(i=1; i<=m; i++) {//有向图；
+		cin>>a>>b>>c;
+		e[a][b]=c;
+                       //再加上 e[b][a]=c;//就是无向图了；
+	}
+	int start;
+	cin>>start;
+	visit[start]=1;
+	for(i=1; i<=n; i++) {
+		dis[i]=e[start][i];//源点start 到其他点当前的最大距离；
+	}
+	for(i=1;i<=n;i++){
+		cout<<dis[i]<<endl;
+	}
+	int k;
+	for(i=1; i<=n-1; i++) {/*为什么不能是n;因为如果张弛到第N 次
+第一个内循环不会执行了 因为都被标记了；所以posmin=0；
+在第二个内循环中  就变成了 dis[k]>dis[0]+e[0 ][k]==0 恒成立；所以都变为 0 
+总结 有n 个点 就张弛n-1次； */
+		int posmin;//前往不要将posmin写成 posmin=0,如果不改的话 在执行最后一次循环时，（即i=n-1时，posmin=0）{
+		//就会有dis[k]>dis[0]+e[0][k]==0 恒成立 。那么就会把所有的值全部变成 1;  
+		int min=inf;
+		for(j=1; j<=n; j++) {
+			if(visit[j]==0) {//前提条件； 
+				if(min>dis[j]) {//dis[j] start到j的距离； 
+					min=dis[j];
+					posmin=j;//找到当前距离源点最近的点；
+				}
+			}
+		}
+		//cout<<"posmin is"<<posmin<<endl;
+		visit[posmin]=1;//该点已经张弛了；
+		for(k=1; k<=n; k++) {
+			if(dis[k]>dis[posmin]+e[posmin][k]) {
+				dis[k]=dis[posmin]+e[posmin][k];
+				//cout<<"dis ["<<k<<"] is"<<dis[k]<<endl;
+			}
+		}
+	}
+	for(i=1;i<=n;i++){
+		cout<<dis[i]<<endl;
+	}
+	return 0;
+}

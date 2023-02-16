@@ -1,0 +1,27 @@
+找出数列中，每一个数左边离他最近的比他小的数------ acwing 830
+
+
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e6+9;
+int t;
+int stk[N],top=0;
+signed main() {
+	int n;
+	scanf("%d",&n);
+	int i;
+	for(i=1; i<=n; i++) {
+		scanf("%d",&t);
+		while(top!=0&&stk[top]>=t) {//当栈不为空 并且栈定元素大于t,那么就出栈
+			top--;
+		}
+		if(top==0) {
+			cout<<-1<<" ";
+		} else {
+			cout<<stk[top]<<" ";
+		}
+		stk[++top]=t;
+	}
+	cout<<endl;
+	return 0;
+}

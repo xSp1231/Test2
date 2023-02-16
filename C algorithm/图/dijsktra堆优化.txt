@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+#define int long long
+#define inf 0x3f3f3f3f
+using namespace std;
+const int N=1e6;
+struct edge{
+	int next;//next 表示以该点为起点的上一条边 
+	int to ;//表示该边指向的地方 
+	int w;
+}; 
+struct node//建立大根堆 优先队列 
+{
+   int  now,w;// now为现在所在的节点   w为权值； 
+   bool operator <(const node &a ) const{
+		return a.w<w;
+	}
+};
+priority_queue<node> q; //定义一个大根堆 
+edge e[N];
+int n,m,start;
+int vis[N],head[N],dis[N],cnt=1;//cnt为边的编号 
+void add(int a,int b,int c){//链式前向星存图 
+	e[cnt].to=b;
+	e[cnt].w=c;//权值 
+	e[cnt].next=head[a];//head[i]表示以i为起点的最后一条边 
+	head[a]=cnt;//更新head[a]；  
+    cnt++;
+}
+void dikstra(){
+	int i,j;
+   for(i=1;i<=n;i++){
+		dis[i]=inf;
+	 }
+	 dis[start]=0;
+	q.push({start,0});//位置(即为所在的节点) 权值（距离） 
+	while(!q.empty()){
+	node t=q.top();
+	q.pop();
+	if(vis[t.now]==1){
+		continue;
+	}
+	vis[t.now]=1;//t.now为当前节点 
+	for(i=head[t.now];i!=0;i=e[i].next){//变量为边      遍历各边 
+	 int j=e[i].to;//该边所指向的下一个节点 
+	 if(dis[j]>dis[t.now]+e[i].w){
+	 	dis[j]=dis[t.now]+e[i].w;//更新距离 
+	  q.push({j,dis[j]});
+	 } 
+	}
+	} 
+}
+signed main(){	
+	cin>>n>>m>>start;
+	int i,j;
+	int a,b,c;
+	for(i=1;i<=m;i++){
+		cin>>a>>b>>c;
+		add(a,b,c);
+	}
+   dikstra();
+for(i=1;i<=n;i++){
+	cout<<dis[i]<<" ";
+}	
+	return 0; 
+}

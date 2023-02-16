@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+#define int long long
+#define inf 0x3f3f3f3f
+#define pi 3.141592
+using namespace std;
+const int N=1e6;
+struct node {
+	double x,y;
+	double angle;
+	double dis;
+};
+node a[N],dot[N];
+double cmp(node a,node b) {
+	if(a.angle!=b.angle) {
+		return a.angle<b.angle;
+	} else {
+		return a.dis<b.dis;
+	}
+}
+double lr(node a,node b,node c) {
+	double resp=a.x*b.y+b.x*c.y+c.x*a.y-a.x*c.y-b.x*a.y-c.x*b.y;
+	if(resp>=0) { // c在向量ab左边
+		return 1;
+	} else {
+		return 0;
+	}
+}
+signed main() {
+	int t;
+	cin>>t;
+	while(t--){
+	int n;
+	cin>>n;
+	int i,j;
+	double lowy=inf;
+	int  pos;//pos为最下面的点的编号；
+	for(i=1; i<=n; i++) {
+		cin>>a[i].x>>a[i].y;
+		if(a[i].y<lowy) {
+			lowy=a[i].y;
+			pos=i;
+		}
+	}//找到了处于最下面的点的坐标 (3 ,2)  (-3 ,-2) (-3,2)
+	double lenx=a[pos].x ,leny=a[pos].y;//所有点要移动的距离；
+	for(i=1; i<=n; i++) { //所有点移动  最下面的点移动到原点
+		a[i].x-=lenx;
+		a[i].y-=leny;
+		a[i].dis=sqrt(a[i].x*a[i].x+a[i].y*a[i].y);
+		a[i].angle=(atan2(a[i].y,a[i].x)*180)/pi;
+	}
+	sort(a+1,a+n+1,cmp); //按照极角的大小排序
+	/*	for(i=1;i<=n;i++){
+			cout<<a[i].x<<" "<<a[i].y<<" "<<a[i].angle<<" "<<a[i].dis<<endl;
+		}*/
+	dot[1]=a[1];
+	dot[2]=a[2];
+	int top=2;//栈顶指示器
+	i=3;
+	while(i<=n) {
+		if(lr(dot[top-1],dot[top],a[i])==1) { //ans[i]在向量dot[top-1],dot[top]左边的话，入栈
+			top++;
+			dot[top]=a[i];
+			i++;//i比top快一点
+		} else {
+			top--;
+			while(!lr(dot[top-1],dot[top],a[i])) {
+				top--;
+			}
+			top++;
+			dot[top]=a[i];
+			i++;
+		}
+	}
+	/*for(i=1; i<=top; i++) {
+		cout<<dot[i].x<<" "<<dot[i].y<<endl;
+	}*/
+	double s=0;
+	for(i=2; i<=n-1; i++) {
+		s+=0.5*(dot[i].x*dot[i+1].y-dot[i+1].x*dot[i].y);
+	}
+	printf("%.1lf\n",s);
+	}
+	return 0;
+}
+
